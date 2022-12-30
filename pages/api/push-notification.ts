@@ -38,10 +38,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           body: "Poslana je obavijest",
         })
       );
+      res.status(200).json({ status: true });
     } catch (error) {
-      console.error(error);
+      res.status(500).json({ status: error });
     }
   });
-
-  res.status(200).json({ success: true });
 }
