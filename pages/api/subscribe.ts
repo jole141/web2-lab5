@@ -1,32 +1,31 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import * as fs from "fs";
 import path from "path";
+import { Pool } from "pg";
 
 type Data = {
-  subscriptions: PushSubscription[];
+  subscription: PushSubscription;
 };
 
-let subscriptions: PushSubscription[] = [];
-const jsonDirectory = path.join(process.cwd(), "json");
-const SUBS_FILENAME = "/subscriptions.json";
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: "web2_fer_labosi",
+  password: process.env.DB_PASSWORD,
+  port: 5432,
+  ssl: true,
+});
 
-try {
-  subscriptions = JSON.parse(
-    fs.readFileSync(jsonDirectory + SUBS_FILENAME).toString()
-  );
-} catch (error) {
-  console.error(error);
-}
-
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
-): void {
+): Promise<void> {
   let sub = req.body.sub;
-  subscriptions.push(sub);
-  fs.writeFileSync(
-    jsonDirectory + SUBS_FILENAME,
-    JSON.stringify(subscriptions)
-  );
-  res.status(200).json({ subscriptions: subscriptions });
+  console.log(sub);
+  const client = await pool.connect();
+  console.log("Connected to database", client);
+  await pool.query("INSERT INTO subscriptions (subscription) VALUES ($1)", [
+    JSON.stringify(sub),
+  ]);
+  res.status(200).json({ subscription: sub });
 }

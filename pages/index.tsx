@@ -1,4 +1,4 @@
-import React, { LegacyRef, useEffect, useRef } from "react";
+import React, { LegacyRef, useCallback, useEffect, useRef } from "react";
 
 const WIDTH = 800;
 const HEIGHT = 600;
@@ -41,34 +41,7 @@ export default function Home() {
     }
   };
 
-  const pushPermission = () => {
-    if ("Notification" in window && "serviceWorker" in navigator) {
-      Notification.requestPermission(async function (res) {
-        if (res === "granted") {
-          await setupPushSubscription();
-        } else {
-          console.log("User denied push notifs:", res);
-        }
-      });
-    }
-  };
-
-  function urlBase64ToUint8Array(base64String: string): Uint8Array {
-    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding)
-      .replace(/\-/g, "+")
-      .replace(/_/g, "/");
-
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-  }
-
-  const setupPushSubscription = async (): Promise<void> => {
+  const setupPushSubscription = useCallback(async (): Promise<void> => {
     try {
       const reg = await navigator.serviceWorker.ready;
       let sub = await reg.pushManager.getSubscription();
@@ -91,7 +64,34 @@ export default function Home() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
+
+  const pushPermission = useCallback(() => {
+    if ("Notification" in window && "serviceWorker" in navigator) {
+      Notification.requestPermission(async function (res) {
+        if (res === "granted") {
+          await setupPushSubscription();
+        } else {
+          console.log("User denied push notifs:", res);
+        }
+      });
+    }
+  }, [setupPushSubscription]);
+
+  function urlBase64ToUint8Array(base64String: string): Uint8Array {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, "+")
+      .replace(/_/g, "/");
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
 
   const pushNotification = async () => {
     await fetch("/api/push-notification", {
@@ -109,7 +109,7 @@ export default function Home() {
 
   useEffect(() => {
     pushPermission();
-  }, []);
+  });
 
   return (
     <>

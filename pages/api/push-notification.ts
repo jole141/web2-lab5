@@ -2,20 +2,21 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import webPush from "web-push";
 import fs from "fs";
 import path from "path";
+import { Pool } from "pg";
 
-let subscriptions: any[] = [];
-const jsonDirectory = path.join(process.cwd(), "json");
-const SUBS_FILENAME = "/subscriptions.json";
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: "web2_fer_labosi",
+  password: process.env.DB_PASSWORD,
+  port: 5432,
+  ssl: true,
+});
 
-try {
-  subscriptions = JSON.parse(
-    fs.readFileSync(jsonDirectory + SUBS_FILENAME).toString()
-  );
-} catch (error) {
-  console.error(error);
-}
-
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   // Set the VAPID keys
   const vapidKeys = {
     publicKey:
@@ -29,18 +30,23 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     vapidKeys.privateKey
   );
 
-  subscriptions.forEach(async (sub) => {
-    try {
+  // get all subscriptions from database
+  await pool.connect();
+  const result = await pool.query("SELECT * FROM subscriptions");
+  const subscriptions = result.rows;
+
+  try {
+    for (const sub of subscriptions) {
       await webPush.sendNotification(
-        sub,
+        JSON.parse(sub.subscription),
         JSON.stringify({
           title: "Obavijest",
           body: "Poslana je obavijest",
         })
       );
-      res.status(200).json({ status: true });
-    } catch (error) {
-      res.status(500).json({ status: error });
     }
-  });
+    res.status(200).json({ status: true });
+  } catch (error) {
+    res.status(500).json({ status: error });
+  }
 }
