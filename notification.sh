@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Append the text to the end of the file
+echo "self.addEventListener("push", function (event) {
+  if (event.data) {
+    console.log("Push event!! ", event.data.text());
+  } else {
+    console.log("Push event but no data");
+  }
+});" >> /out/sw.js
