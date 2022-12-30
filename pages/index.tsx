@@ -103,6 +103,10 @@ export default function Home() {
     });
   };
 
+  const test = async () => {
+    await fetch("/api/test");
+  };
+
   useEffect(() => {
     initCamera();
     pushPermission();
@@ -118,6 +122,9 @@ export default function Home() {
         </button>
         <button className="capture-button" onClick={pushNotification}>
           Push Notification
+        </button>
+        <button className="capture-button" onClick={test}>
+          Test
         </button>
         <canvas
           ref={canvasRef}
