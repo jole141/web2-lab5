@@ -104,7 +104,7 @@ export default function Home() {
   };
 
   const test = async () => {
-    await fetch("/api/test");
+    await fetch("/api/jole");
   };
 
   useEffect(() => {
