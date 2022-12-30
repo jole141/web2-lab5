@@ -4,19 +4,18 @@ import fs from "fs";
 import path from "path";
 import { Pool } from "pg";
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: "web2_fer_labosi",
-  password: process.env.DB_PASSWORD,
-  port: 5432,
-  ssl: true,
-});
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: "web2_fer_labosi",
+    password: process.env.DB_PASSWORD,
+    port: 5432,
+    ssl: true,
+  });
   // Set the VAPID keys
   const vapidKeys = {
     publicKey:

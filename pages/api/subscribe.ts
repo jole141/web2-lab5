@@ -7,19 +7,18 @@ type Data = {
   message: any;
 };
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: "web2_fer_labosi",
-  password: process.env.DB_PASSWORD,
-  port: 5432,
-  ssl: true,
-});
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ): Promise<void> {
+  const pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: "web2_fer_labosi",
+    password: process.env.DB_PASSWORD,
+    port: 5432,
+    ssl: true,
+  });
   let sub = req.body.sub;
   try {
     await pool.connect();
