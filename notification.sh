@@ -7,4 +7,4 @@ echo "self.addEventListener("push", function (event) {
   } else {
     console.log("Push event but no data");
   }
-});" >> /out/sw.js
+});" >> ./out/sw.js
