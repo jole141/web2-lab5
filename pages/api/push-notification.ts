@@ -9,7 +9,7 @@ const SUBS_FILENAME = "/subscriptions.json";
 
 try {
   subscriptions = JSON.parse(
-    fs.readFileSync(jsonDirectory + SUBS_FILENAME, "utf8").toString()
+    fs.readFileSync(jsonDirectory + SUBS_FILENAME).toString()
   );
 } catch (error) {
   console.error(error);

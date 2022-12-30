@@ -3,7 +3,7 @@ import * as fs from "fs";
 import path from "path";
 
 type Data = {
-  success: boolean;
+  subscriptions: PushSubscription[];
 };
 
 let subscriptions: PushSubscription[] = [];
@@ -12,7 +12,7 @@ const SUBS_FILENAME = "/subscriptions.json";
 
 try {
   subscriptions = JSON.parse(
-    fs.readFileSync(jsonDirectory + SUBS_FILENAME, "utf8").toString()
+    fs.readFileSync(jsonDirectory + SUBS_FILENAME).toString()
   );
 } catch (error) {
   console.error(error);
@@ -24,11 +24,9 @@ export default function handler(
 ): void {
   let sub = req.body.sub;
   subscriptions.push(sub);
-  console.log(sub);
   fs.writeFileSync(
     jsonDirectory + SUBS_FILENAME,
-    JSON.stringify(subscriptions),
-    "utf8"
+    JSON.stringify(subscriptions)
   );
-  res.status(200).json({ success: true });
+  res.status(200).json({ subscriptions: subscriptions });
 }
