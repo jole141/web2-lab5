@@ -4,7 +4,7 @@ import path from "path";
 import { Pool } from "pg";
 
 type Data = {
-  subscription: PushSubscription;
+  message: any;
 };
 
 const pool = new Pool({
@@ -21,11 +21,13 @@ export default async function handler(
   res: NextApiResponse<Data>
 ): Promise<void> {
   let sub = req.body.sub;
-  console.log(sub);
-  const client = await pool.connect();
-  console.log("Connected to database", client);
-  await pool.query("INSERT INTO subscriptions (subscription) VALUES ($1)", [
-    JSON.stringify(sub),
-  ]);
-  res.status(200).json({ subscription: sub });
+  try {
+    await pool.connect();
+    await pool.query("INSERT INTO subscriptions (subscription) VALUES ($1)", [
+      JSON.stringify(sub),
+    ]);
+    res.status(200).json({ message: sub });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
 }
