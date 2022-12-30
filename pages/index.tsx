@@ -103,10 +103,6 @@ export default function Home() {
     });
   };
 
-  const test = async () => {
-    await fetch("/api/jole");
-  };
-
   useEffect(() => {
     initCamera();
   }, [videoRef]);
@@ -126,9 +122,6 @@ export default function Home() {
         <button className="capture-button" onClick={pushNotification}>
           Push Notification
         </button>
-        <button className="capture-button" onClick={test}>
-          Test
-        </button>
         <canvas
           ref={canvasRef}
           width={WIDTH}
@@ -136,7 +129,6 @@ export default function Home() {
           style={{ display: "none" }}
         />
         <div className="download">
-          {" "}
           <img ref={photoRef} />
           <a ref={downloadRef} download="capture.png">
             Download
