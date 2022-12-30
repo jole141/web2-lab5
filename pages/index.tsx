@@ -109,8 +109,11 @@ export default function Home() {
 
   useEffect(() => {
     initCamera();
-    pushPermission();
   }, [videoRef]);
+
+  useEffect(() => {
+    pushPermission();
+  }, []);
 
   return (
     <>
