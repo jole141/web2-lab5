@@ -74,7 +74,7 @@ export default function Home() {
       let sub = await reg.pushManager.getSubscription();
       if (sub === null) {
         const publicKey =
-          "BAqL-JB2EUQrhwsYYVZ-tM57FpQNy4LehG8DdemURuiW9zGcNz91CMCutmGhl2xZrly29DszWJ2x7hFBeAhhuAc";
+          "BHWtFE4ZonR0NiQFh_B_bpbgGNmcCaqvA49uvx_63H3UI28KrpLHkqwHfOcsYOuFMcKlIjoTF0dyKHrg80pYyHk";
         sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(publicKey),
