@@ -1,31 +1,34 @@
 "use strict";
 
 self.addEventListener("push", function (event) {
-  const data = JSON.parse(event.data.text());
-  event.waitUntil(
-    registration.showNotification(data.title, {
-      body: data.message,
-      icon: "/icons/android-chrome-192x192.png",
-    })
-  );
+  var data = { title: "title", body: "body", redirectUrl: "/" };
+  if (event.data) {
+    data = JSON.parse(event.data.text());
+  }
+  let options = {
+    body: data.body,
+    icon: "assets/img/android/androidlaunchericon-96-96.png",
+    badge: "assets/img/android/androidlaunchericon-96-96.png",
+    vibrate: [200, 100, 200, 100, 200, 100, 200],
+    data: {
+      redirectUrl: data.redirectUrl,
+    },
+  };
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
 self.addEventListener("notificationclick", function (event) {
-  event.notification.close();
+  let notification = event.notification;
   event.waitUntil(
-    clients
-      .matchAll({ type: "window", includeUncontrolled: true })
-      .then(function (clientList) {
-        if (clientList.length > 0) {
-          let client = clientList[0];
-          for (let i = 0; i < clientList.length; i++) {
-            if (clientList[i].focused) {
-              client = clientList[i];
-            }
-          }
-          return client.focus();
-        }
-        return clients.openWindow("/");
-      })
+    clients.matchAll().then(function (clis) {
+      clis.forEach((client) => {
+        client.navigate(notification.data.redirectUrl);
+        client.focus();
+      });
+      notification.close();
+    })
   );
+});
+self.addEventListener("notificationclose", function (event) {
+  console.log("notificationclose", event);
 });
