@@ -1,6 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import * as fs from "fs";
-import path from "path";
 import { Pool } from "pg";
 
 type Data = {

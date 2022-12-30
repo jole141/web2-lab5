@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import webPush from "web-push";
-import fs from "fs";
-import path from "path";
 import { Pool } from "pg";
 
 export default async function handler(
