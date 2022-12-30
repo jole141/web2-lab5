@@ -19,8 +19,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // Set the VAPID keys
   const vapidKeys = {
     publicKey:
-      "BHWtFE4ZonR0NiQFh_B_bpbgGNmcCaqvA49uvx_63H3UI28KrpLHkqwHfOcsYOuFMcKlIjoTF0dyKHrg80pYyHk",
-    privateKey: "FudqkbYofWdcjDxn9r4_2SEZc8OAg2z0-mccdoeR7Gw",
+      "BMLeXMRXNrG4ESa31NbsWrGaRznHYyND8vAgVr-XfdNixLHqA_CT_ozVF6WtuPcaYewDdDJcjPJpgIqXF29stIc",
+    privateKey: "UtG2XgsHUgdwC4zAAEYygmkzUF__EWb123pOorzG9oI",
   };
 
   webPush.setVapidDetails(
