@@ -16,6 +16,7 @@ export default function Home() {
   const downloadRef = useRef<HTMLAnchorElement>(null);
 
   const [items, setItems] = useState(["jedan", "tri", "deset", "dvadeset"]);
+  const [sorted, setSorted] = useState(false);
 
   const initCamera = () => {
     navigator.mediaDevices
@@ -35,7 +36,9 @@ export default function Home() {
   function sortItems() {
     const col = new Intl.Collator("hr");
     const sorted = items.sort(col.compare);
+    console.log(sorted);
     setItems(sorted);
+    setSorted(true);
   }
 
   const captureImage = () => {
@@ -141,11 +144,16 @@ export default function Home() {
         </button>
         <div>
           <h1>Test progressive enhancement</h1>
-          <ul>
-            {items.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
+          <p>
+            Imamo listu ["jedan", "tri", "deset", "dvadeset"] i sortiramo ju
+          </p>
+          {sorted && (
+            <ul>
+              {items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          )}
         </div>
         <canvas
           ref={canvasRef}
