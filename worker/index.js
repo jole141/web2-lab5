@@ -29,3 +29,17 @@ self.addEventListener("notificationclick", function (event) {
       })
   );
 });
+
+self.addEventListener("sync", (event) => {
+  if (event.tag === "my-sync-event") {
+    event.waitUntil(doSync());
+  }
+});
+
+async function doSync() {
+  try {
+    // Perform sync tasks here, such as making API calls or storing data in IndexedDB
+  } catch (error) {
+    console.error("Error during sync: ", error);
+  }
+}

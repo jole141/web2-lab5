@@ -1,4 +1,10 @@
-import React, { LegacyRef, useCallback, useEffect, useRef } from "react";
+import React, {
+  LegacyRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 const WIDTH = 800;
 const HEIGHT = 600;
@@ -8,6 +14,8 @@ export default function Home() {
   const photoRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const downloadRef = useRef<HTMLAnchorElement>(null);
+
+  const [items, setItems] = useState(["jedan", "tri", "deset", "dvadeset"]);
 
   const initCamera = () => {
     navigator.mediaDevices
@@ -23,6 +31,12 @@ export default function Home() {
         console.log(error);
       });
   };
+
+  function sortItems() {
+    const col = new Intl.Collator("hr");
+    const sorted = items.sort(col.compare);
+    setItems(sorted);
+  }
 
   const captureImage = () => {
     if (
@@ -122,6 +136,17 @@ export default function Home() {
         <button className="capture-button" onClick={pushNotification}>
           Push Notification
         </button>
+        <button className="capture-button" onClick={sortItems}>
+          Test progressive enhancement
+        </button>
+        <div>
+          <h1>Test progressive enhancement</h1>
+          <ul>
+            {items.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
         <canvas
           ref={canvasRef}
           width={WIDTH}
