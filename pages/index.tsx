@@ -144,9 +144,7 @@ export default function Home() {
         </button>
         <div>
           <h1>Test progressive enhancement</h1>
-          <p>
-            Imamo listu ["jedan", "tri", "deset", "dvadeset"] i sortiramo ju
-          </p>
+          <p>Imamo listu [jedan, tri, deset, dvadeset] i sortiramo ju</p>
           {sorted && (
             <ul>
               {items.map((item) => (
